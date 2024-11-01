@@ -12,7 +12,9 @@ function Design() {
         description: 'Welcome to my Node.js portfolio! Explore my projects showcasing expertise in backend development. From web apps to APIs, I deliver efficient solutions with Node.js, Express.js, MongoDB, and more. Lets connect to discuss collaborations and opportunities for innovation in the digital world',
         linkedIn: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/',
         instagram: 'https://www.instagram.com/_aravind_gopan_',
-        resume: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/'
+        resume: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/',
+        email:"",
+        phone:''
     });
     const [projects, setProjects] = useState([
         {
@@ -100,12 +102,20 @@ function Design() {
             setCurrentProject({ projectName: "", projectDescription: "", githubLink: "", demoLink: "" }); // Clear input after adding
         }
     };
+    const deleteProject =(delindex)=>{
+        setProjects(projects.filter((project, index) => index !== delindex));
+    }
+    const deleteSkill=(deindex)=>{
+        setCurrentSkills(currentSkills.filter((skill, index) => index !== deindex));
+    }
 
     return (
         <div>
-            <div className='w-full h-10 '>
+            <div className='w-full h-10 flex justify-between my-3 '>
                 <Theme></Theme>
+                <button className='bg-red-500 rounded-lg p-2'>generate link</button>
             </div>
+            <div className='border mb-2'></div>
             <div className='flex h-screen'>
 
                 <div className='w-1/2  lg:w-1/3 p-4 overflow-scroll'>
@@ -147,6 +157,28 @@ function Design() {
                         />
                     </label>
                     <label className="form-control w-full max-w-xs mx-auto border-2 border-accent-content rounded-lg p-3 my-2">
+                    <div className="label">
+                            <span className="label-text">Enter Email address</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            name="email"
+                            value={basicDetails.email}
+                            onChange={handleBasicInputChange}
+                            className="input input-bordered w-full max-w-xs"
+                        />
+                        <div className="label">
+                            <span className="label-text">Enter Phone Number </span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            name="phone"
+                            value={basicDetails.phone}
+                            onChange={handleBasicInputChange}
+                            className="input input-bordered w-full max-w-xs"
+                        />
                         <div className="label">
                             <span className="label-text">Enter LinkedIn URL</span>
                         </div>
@@ -241,12 +273,14 @@ function Design() {
                         />
                         <button type="button" onClick={addProject} className="btn my-1">Add</button>
                     </label>
+                    
+
                 </div>
 
                 <div className='w-1/2 lg:w-2/3 border-2 border-accent-content rounded-3xl p-4 overflow-scroll mx-2'>
                     <Basic basicDetails={basicDetails}></Basic>
-                    <Skill skill={currentSkills}></Skill>
-                    <Projects project={projects}></Projects>
+                    <Skill skill={currentSkills} onDelete={deleteSkill}></Skill>
+                    <Projects project={projects}  onDelete={deleteProject}></Projects>
                 </div>
             </div>
         </div>

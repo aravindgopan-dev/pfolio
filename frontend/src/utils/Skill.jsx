@@ -1,6 +1,6 @@
 import React from 'react';
-
-export default function Skill({ skill }) {
+import { MdDeleteForever } from "react-icons/md";
+export default function Skill({ skill,onDelete}) {
   return (
     <div >
         <div className='border mb-5'></div>
@@ -11,7 +11,7 @@ export default function Skill({ skill }) {
         <div className='flex gap-5 flex-wrap'>
           {/* Render something based on the skill prop here */}
           {skill.map((item, index) => (
-            <div key={index} className='px-3 border rounded-md text-sm'>{item}</div> // Use key for each item in the list
+            <div key={index} className='px-3 border rounded-md text-sm flex justify-between'><div>{item}</div><button className='pl-2 pt-1' onClick={()=>onDelete(index)} ><MdDeleteForever /></button></div> // Use key for each item in the list
           ))}
         </div>
       )}

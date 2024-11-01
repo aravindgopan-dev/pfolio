@@ -1,6 +1,6 @@
 import React from 'react';
-
-export default function Projects({ project }) {
+import { MdDeleteForever } from "react-icons/md";
+export default function Projects({ project ,onDelete}) {
   return (
     <div >
       <div className='border my-5'></div>
@@ -9,7 +9,7 @@ export default function Projects({ project }) {
         project.map((items, index) => (
           <div key={index} className='border my-2 rounded-md p-2'>
             {items.projectName ? (
-              <div className='text-2xl'>{items.projectName}</div>
+              <div className='text-2xl flex justify-between '><div>{items.projectName}</div>  <button onClick={()=>onDelete(index)}><MdDeleteForever /></button></div>
             ) : (
              null
             )}
