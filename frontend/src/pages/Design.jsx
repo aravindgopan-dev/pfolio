@@ -4,6 +4,7 @@ import { FaLinkedin } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import Basic from '../utils/Basic';
 import Skill from '../utils/Skill';
+import axios from 'axios';
 import Projects from '../utils/Projects';
 function Design() {
     const [preview, serpreview] = useState(false)
@@ -14,8 +15,8 @@ function Design() {
         linkedIn: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/',
         instagram: 'https://www.instagram.com/_aravind_gopan_',
         resume: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/',
-        email: "",
-        phone: ''
+        email: "aravindgopan93@gmail.com",
+        phone: '8129319804'
     });
     const [projects, setProjects] = useState([
         {
@@ -109,6 +110,23 @@ function Design() {
     const deleteSkill = (deindex) => {
         setCurrentSkills(currentSkills.filter((skill, index) => index !== deindex));
     }
+    
+
+    const sendDetails = async () => {
+        const data = {
+            basicDetails, // Ensure these variables are defined
+            projects,
+            currentSkills
+        };
+
+        try {
+            const response = await axios.post('/api/v1/details', data);
+            console.log('Response:', response.data);
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
+    };
+
     if (preview == true) {
         return (
             <div>
@@ -124,7 +142,7 @@ function Design() {
         <div>
             <div className='w-full h-10 flex justify-between my-3 '>
                 <Theme></Theme>
-                <button className='bg-red-500 rounded-lg p-2'>generate link</button>
+                <button className='bg-red-500 rounded-lg p-2' onClick={() => sendDetails()}>generate link</button>
             </div>
             <div className='border mb-2'></div>
             <div className='flex h-screen'>

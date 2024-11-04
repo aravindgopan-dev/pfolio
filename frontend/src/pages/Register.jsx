@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Login() {
+function Register() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -13,15 +14,16 @@ function Login() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/login', {
+      const response = await axios.post('http://localhost:5000/api/v1/register', {
+        name,
         email,
         password,
       });
-      // Handle successful login (e.g., store token, redirect)
+      // Handle successful registration (e.g., redirect to login)
       console.log(response.data);
-      // Example: localStorage.setItem('token', response.data.token);
+      // Example: You might want to redirect the user or show a success message here.
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -31,8 +33,21 @@ function Login() {
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-xs">
         <form onSubmit={handleSubmit} className="bg-base-100 shadow-md rounded-lg p-6 mb-4">
-          <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
+          <h2 className="text-center text-2xl font-bold mb-4">Register</h2>
           {error && <p className="text-red-500 text-xs italic">{error}</p>}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="input input-bordered w-full"
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               Email
@@ -65,7 +80,7 @@ function Login() {
               disabled={loading}
               className={`btn ${loading ? 'loading' : 'btn-primary'} w-full`}
             >
-              {loading ? 'Loading...' : 'Login'}
+              {loading ? 'Loading...' : 'Register'}
             </button>
           </div>
         </form>
@@ -74,4 +89,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
