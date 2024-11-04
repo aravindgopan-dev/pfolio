@@ -3,8 +3,9 @@ const app=express()
 const loginRouter=require("./router/userRouter")
 const mongoose=require("mongoose")
 require('dotenv').config();
-
-
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+const authMiddleware=require("./middleware/authMiddleware")
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
