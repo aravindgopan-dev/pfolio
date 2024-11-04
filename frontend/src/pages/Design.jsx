@@ -6,6 +6,7 @@ import Basic from '../utils/Basic';
 import Skill from '../utils/Skill';
 import Projects from '../utils/Projects';
 function Design() {
+    const [preview, serpreview] = useState(false)
     const [basicDetails, setBasicDetails] = useState({
         name: 'Aravind Gopan',
         position: 'software engineer',
@@ -13,8 +14,8 @@ function Design() {
         linkedIn: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/',
         instagram: 'https://www.instagram.com/_aravind_gopan_',
         resume: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/',
-        email:"",
-        phone:''
+        email: "",
+        phone: ''
     });
     const [projects, setProjects] = useState([
         {
@@ -102,11 +103,21 @@ function Design() {
             setCurrentProject({ projectName: "", projectDescription: "", githubLink: "", demoLink: "" }); // Clear input after adding
         }
     };
-    const deleteProject =(delindex)=>{
+    const deleteProject = (delindex) => {
         setProjects(projects.filter((project, index) => index !== delindex));
     }
-    const deleteSkill=(deindex)=>{
+    const deleteSkill = (deindex) => {
         setCurrentSkills(currentSkills.filter((skill, index) => index !== deindex));
+    }
+    if (preview == true) {
+        return (
+            <div>
+
+                <Basic basicDetails={basicDetails}></Basic>
+                <Skill skill={currentSkills} onDelete={deleteSkill}></Skill>
+                <Projects project={projects} onDelete={deleteProject}></Projects>
+            </div>
+        )
     }
 
     return (
@@ -157,7 +168,7 @@ function Design() {
                         />
                     </label>
                     <label className="form-control w-full max-w-xs mx-auto border-2 border-accent-content rounded-lg p-3 my-2">
-                    <div className="label">
+                        <div className="label">
                             <span className="label-text">Enter Email address</span>
                         </div>
                         <input
@@ -273,14 +284,14 @@ function Design() {
                         />
                         <button type="button" onClick={addProject} className="btn my-1">Add</button>
                     </label>
-                    
+
 
                 </div>
 
                 <div className='w-1/2 lg:w-2/3 border-2 border-accent-content rounded-3xl p-4 overflow-scroll mx-2'>
                     <Basic basicDetails={basicDetails}></Basic>
                     <Skill skill={currentSkills} onDelete={deleteSkill}></Skill>
-                    <Projects project={projects}  onDelete={deleteProject}></Projects>
+                    <Projects project={projects} onDelete={deleteProject}></Projects>
                 </div>
             </div>
         </div>

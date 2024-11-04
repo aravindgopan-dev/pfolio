@@ -15,6 +15,7 @@ function Basic({ basicDetails }) {
             {basicDetails?.description && (
                 <h3 className='text-base w-full lg:w-2/3 md:text-xl md:mt-2'>{basicDetails.description}</h3>
             )}
+            
 
             {/* Social Links */}
             <div className='flex space-x-4 py-5'>
@@ -33,6 +34,12 @@ function Basic({ basicDetails }) {
                     </a>
                 )}
             </div>
+            {basicDetails?.email && (
+                <h3 className='text-base w-full lg:w-2/3 md:text-xl md:mt-2'>{basicDetails.email}</h3>
+            )}
+             {basicDetails?.phone && (
+                <h3 className='text-base w-full lg:w-2/3 md:text-xl md:mt-2'>{basicDetails.phone}</h3>
+            )}
 
             {/* Resume Download */}
             <div>
