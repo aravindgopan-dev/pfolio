@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const login = async (req, res, next) => {
+    console.log(req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -21,22 +22,28 @@ const login = async (req, res, next) => {
             return next(error("Invalid email or password", 401));
         }
 
+        // Generate a JWT token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
+        // Set cookie options
         const cookieOptions = {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 2 * 24 * 60 * 60 * 1000 // 2 days
+            httpOnly: false,
+           
+            maxAge: 2 * 24 * 60 * 60 * 1000*1000 // 2 days
         };
 
+        // Set the token as a cookie
         res.cookie('token', token, cookieOptions);
-        res.status(200).json({ message: "Login successful" });
+
+        // Send success response with the username
+        res.status(200).json({ message: "Login successful", user: { name: user.name } });
     } catch (err) {
         next(err);
     }
 };
-
 const register = async (req, res, next) => {
+    console.log("hii")
+    console.log(req.body)
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
@@ -60,6 +67,7 @@ const register = async (req, res, next) => {
 };
 
 const logout = (req, res, next) => {
+    console.log("here")
     try {
         res.clearCookie('token'); // Clear the cookie containing the token
         res.status(200).json({ message: "Logout successful" });

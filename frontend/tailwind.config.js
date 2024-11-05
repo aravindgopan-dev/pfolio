@@ -5,7 +5,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'custom-blue': 'rgb(0, 11, 88)', // Dark blue
+        'custom-deep-blue': 'rgb(0, 49, 97)', // Deep blue
+        'custom-teal': 'rgb(0, 106, 103)', // Teal
+        'custom-yellow': 'rgb(255, 244, 183)', // Soft yellow
+      },
+    },
   },
   daisyui: {
     themes: [

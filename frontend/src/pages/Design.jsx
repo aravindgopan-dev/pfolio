@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Theme from '../utils/theme';
 import { FaLinkedin } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
@@ -6,67 +6,36 @@ import Basic from '../utils/Basic';
 import Skill from '../utils/Skill';
 import axios from 'axios';
 import Projects from '../utils/Projects';
+import { Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Navbar from '../utils/Navbar';
 function Design() {
+
     const [preview, serpreview] = useState(false)
     const [basicDetails, setBasicDetails] = useState({
-        name: 'Aravind Gopan',
-        position: 'software engineer',
-        description: 'Welcome to my Node.js portfolio! Explore my projects showcasing expertise in backend development. From web apps to APIs, I deliver efficient solutions with Node.js, Express.js, MongoDB, and more. Lets connect to discuss collaborations and opportunities for innovation in the digital world',
-        linkedIn: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/',
-        instagram: 'https://www.instagram.com/_aravind_gopan_',
-        resume: 'https://www.linkedin.com/in/aravind-gopan-1a3361204/',
-        email: "aravindgopan93@gmail.com",
-        phone: '8129319804'
+        name: '',
+        position: '',
+        description: '',
+        linkedIn: '',
+        instagram: '',
+        resume: '',
+        email: '',
+        phone: ''
     });
-    const [projects, setProjects] = useState([
-        {
-            projectName: "Portfolio Website",
-            projectDescription: "A personal portfolio website to showcase my projects and skills.",
-            githubLink: "https://github.com/aravindgopan/portfolio",
-            demoLink: "https://aravindgopan.com"
-        },
-        {
-            projectName: "Task Manager",
-            projectDescription: "A web application for managing tasks with user authentication.",
-            githubLink: "https://github.com/aravindgopan/task-manager",
-            demoLink: "https://task-manager-app.com"
-        },
-        {
-            projectName: "Weather App",
-            projectDescription: "A simple weather application that fetches data from a weather API.",
-            githubLink: "https://github.com/aravindgopan/weather-app",
-            demoLink: "https://weather-app.com"
-        }
-    ]);
+
+    const [projects, setProjects] = useState([]);
+
     const [currentProject, setCurrentProject] = useState({
-        projectName: "",
-        projectDescription: "",
-        githubLink: "",
-        demoLink: ""
+        projectName: '',
+        projectDescription: '',
+        githubLink: '',
+        demoLink: ''
     });
-    const [skills, setSkills] = useState("");
-    const [currentSkills, setCurrentSkills] = useState(["MongoDB",
-        "Mongoose",
-        "Express.js",
-        "Node.js",
-        "JavaScript",
-        "React.js",
-        "Redux",
-        "RESTful API design",
-        "GraphQL",
-        "Authentication (JWT, OAuth)",
-        "Middleware in Express",
-        "HTML/CSS",
-        "Tailwind CSS",
-        "DaisyUI",
-        "Axios for API calls",
-        "Version control with Git",
-        "Deployment (Heroku, Render.com)",
-        "Docker (optional)",
-        "Testing (Jest, Mocha)",
-        "Basic understanding of TypeScript",
-        "Agile methodologies"]);
-    const [prev, setPreview] = useState(false)
+
+    const [skills, setSkills] = useState('');
+
+    const [currentSkills, setCurrentSkills] = useState([]);
+
 
 
     const handleBasicInputChange = (e) => {
@@ -77,6 +46,25 @@ function Design() {
         }));
         console.log(basicDetails); // This may not show the updated state immediately due to async setState
     };
+    const isAuth = useSelector((state) => state.user);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.post(`/api/v1/details/data`, { name: isAuth.user });
+                setBasicDetails(response.data.details.basicDetails)
+                setProjects(response.data.details.projects)
+                setCurrentSkills(response.data.details.currentSkills)
+                // setBasicDetails(response.data.basicDetails) // Update state with fetched data
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        if (isAuth.user) { // Only fetch data if isAuth.user is defined
+            fetchData();
+        }
+    }, [isAuth.user]);
 
     const handleProjectInputChange = (e) => {
         const { name, value } = e.target;
@@ -110,8 +98,9 @@ function Design() {
     const deleteSkill = (deindex) => {
         setCurrentSkills(currentSkills.filter((skill, index) => index !== deindex));
     }
-    
 
+
+    const [redirectPath, setRedirectPath] = useState(null);
     const sendDetails = async () => {
         const data = {
             basicDetails, // Ensure these variables are defined
@@ -121,11 +110,15 @@ function Design() {
 
         try {
             const response = await axios.post('/api/v1/details', data);
-            console.log('Response:', response.data);
+            setRedirectPath(`/${response.data.user.name}`); // Use backticks for template literals
+
         } catch (error) {
             console.error('Error sending data:', error);
         }
     };
+    if (redirectPath) {
+        return <Navigate to={redirectPath} />; // Conditional navigation
+    }
 
     if (preview == true) {
         return (
@@ -140,6 +133,7 @@ function Design() {
 
     return (
         <div>
+            <Navbar></Navbar>
             <div className='w-full h-10 flex justify-between my-3 '>
                 <Theme></Theme>
                 <button className='bg-red-500 rounded-lg p-2' onClick={() => sendDetails()}>generate link</button>
